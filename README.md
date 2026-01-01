@@ -1,133 +1,81 @@
-PROJECT STRUCTURE - JcAi Hybrid AI Chrome Extension
+# JcAi - AI Assistant for Chrome
 
-CORE FILES (already created):
-✓ manifest.json          - Extension configuration (Manifest V3)
-✓ background.js          - AI Orchestrator / Service Worker
-✓ popup.html            - Extension UI
-✓ popup.js              - UI logic & event handlers
-✓ package.json          - Dependencies & build scripts
+**Version 1.0**
 
-## Publishing This Repo Safely
+Your personal AI assistant right in your Chrome browser. Ask questions, write code, analyze text, and more — all with a single click.
 
-Before pushing to GitHub, make sure no personal API keys are present. This codebase already keeps secrets out of source control:
+## What is JcAi?
 
-- `.gitignore` excludes `.env`, `.env.local`, and variations, so your local Hugging Face token never stages.
-- The Supabase Edge Function reads `HF_API_KEY` from the platform secret store (`supabase secrets set HF_API_KEY=...`). No key is hard-coded in `supabase/functions/ai-proxy/index.ts`.
-- `dist/` and `node_modules/` stay untracked, keeping the repository lightweight.
+JcAi is a Chrome extension that brings the power of advanced AI directly to your browser. Instead of switching between tabs to use an AI service, JcAi sits in your browser toolbar, ready to help whenever you need it.
 
-### Repo Setup Steps
+### What Can You Do?
 
-1. Remove any previous git metadata (if present): `rm -rf .git`
-2. Initialize a fresh repo: `git init`
-3. Stage files: `git add .`
-4. Commit: `git commit -m "Initial commit"`
-5. Create the GitHub repo and add it as the origin: `git remote add origin https://github.com/<username>/<repo>.git`
-6. Push: `git push -u origin main`
+- **Ask Questions** — Get instant answers on any topic
+- **Write Code** — Get help writing, debugging, and understanding code
+- **Create Content** — Generate text for emails, essays, creative writing
+- **Analyze & Summarize** — Break down complex information
+- **Get Ideas** — Brainstorm and plan with AI assistance
 
-### Supabase Secret Reminder
+All conversations happen in a clean, simple chat interface built right into Chrome.
 
-Deployments rely on Supabase secrets, not local files. After cloning on a new machine or in CI, run:
+## Requirements
 
+- **Chrome 90+** (or any Chromium-based browser like Edge, Brave, Vivaldi)
+- Internet connection
+
+## How to Install
+
+### Step 1: Download the Extension
+Clone or download this repository to your computer.
+
+### Step 2: Build the Extension
+Open your terminal/command prompt and run:
+```bash
+npm install
+npm run build
 ```
-supabase secrets set HF_API_KEY=<your-hf-token>
-```
 
-Never commit this token; keep it scoped to the Supabase environment.
+This creates a `dist` folder with the extension files.
 
-BUILD CONFIGURATION (just created):
-✓ vite.config.js        - Vite bundler configuration for Chrome Extension
-✓ package.json          - Updated with Vite scripts and dev dependencies
+### Step 3: Load Into Chrome
 
-DOCUMENTATION (just created):
-✓ BUILD_GUIDE.md        - Detailed build & deployment guide
-✓ QUICKSTART.md         - Quick reference for your OS
-✓ TERMINAL_COMMANDS.md  - Copy-paste terminal commands
-✓ README.md             - This file
+1. Open Chrome and go to `chrome://extensions/`
+2. Toggle **"Developer mode"** in the top-right corner
+3. Click **"Load unpacked"**
+4. Select the `dist` folder from your project
+5. JcAi should now appear in your Chrome toolbar
 
-HELPER SCRIPTS (just created):
-✓ build.bat             - Windows automated build script
-✓ build.sh              - macOS/Linux automated build script
+### Step 4: Start Using It
 
-GENERATED AFTER BUILD (npm run build):
-dist/
-├── manifest.json
-├── background.js        (bundled with all dependencies)
-├── popup.html
-├── popup.js             (bundled with all dependencies)
-└── assets/              (WASM files from transformers.js)
+Click the JcAi icon in your toolbar and start chatting with your AI assistant!
 
-=== QUICK REFERENCE ===
+## How It Works
 
-To build right now, run in your terminal:
-  npm install
-  npm run build
+JcAi connects to a secure cloud service that handles all the AI processing. Your prompts are sent securely, and responses appear instantly in the chat window. No data is stored locally — everything is processed in real-time.
 
-Then load dist/ into Chrome at chrome://extensions/ (Developer mode)
+## Features
 
-=== WHAT'S NEW ===
+✨ **Fast Responses** — Get answers in seconds  
+🔒 **Secure** — Your conversations are processed securely  
+📱 **Simple Design** — Clean, easy-to-use chat interface  
+💬 **Copy Messages** — Save any response with one click  
+🗑️ **Clear Chat** — Start fresh anytime  
 
-1. vite.config.js
-   - Configured for Manifest V3
-   - Handles service worker bundling
-   - Optimizes WASM module loading
-   - Proper chunk naming for extension compatibility
+## Tips for Best Results
 
-2. Updated package.json
-   - Added "vite" and "glob" to devDependencies
-   - Added build scripts: dev, build, preview
+- Be specific with your questions for better answers
+- Use the chat to refine your requests — AI works best with back-and-forth conversation
+- Copy responses you like for later use
+- Clear chat between different topics for focused conversations
 
-3. Vite handles:
-   - ES module bundling (background.js as ESM service worker)
-   - WASM file extraction and optimization
-   - Dependency optimization for transformers.js
-   - Asset minification
+## Version History
 
-=== KEY FEATURES ===
+**1.0** — Initial release
+- Clean chat interface
+- Real-time AI responses
+- Copy and clear functionality
+- Works offline-ready with serverless backend
 
-✓ No import errors in Chrome
-✓ WASM modules properly bundled
-✓ AI models load correctly
-✓ All dependencies included
-✓ Manifest V3 compliant
-✓ Ready for Chrome Web Store
+---
 
-=== BUILD OUTPUT ===
-
-After running "npm run build", you get:
-  dist/
-  ├── manifest.json (extension config)
-  ├── background.js (all deps bundled)
-  ├── popup.html (UI markup)
-  ├── popup.js (all deps bundled)
-  └── assets/ (WASM + minified code)
-
-Total size: ~2-3MB (mostly WASM modules, not in final build)
-Runtime size: ~500KB (cached models load on demand)
-
-=== DEPLOYMENT OPTIONS ===
-
-Option 1: Local Testing
-  npm run build → Load dist/ into chrome://extensions/
-
-Option 2: Share as ZIP
-  Zip the dist/ folder → Send to others → They extract and load into Chrome
-
-Option 3: Chrome Web Store
-  Zip dist/ → Create developer account → Upload to Web Store
-  (Requires signing, review, etc. - see Chrome documentation)
-
-=== SUPPORT ===
-
-For build issues, check:
-  1. Node.js version (must be 18+): node --version
-  2. npm version: npm --version
-  3. Full rebuild: rm -rf node_modules dist && npm install && npm run build
-  4. Check BUILD_GUIDE.md for troubleshooting
-
-For runtime issues:
-  1. Open Chrome DevTools (F12)
-  2. Check Service Worker console (for background.js errors)
-  3. Check Popup console (for popup.js errors)
-  4. Clear extension cache: Unload/reload extension
-
-Happy coding!
+Made with ❤️ for Chrome users everywhere.
