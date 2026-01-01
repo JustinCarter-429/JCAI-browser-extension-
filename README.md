@@ -79,3 +79,8 @@ JcAi connects to a secure cloud service that handles all the AI processing. Your
 ---
 
 Made with ❤️ for Chrome users everywhere.
+
+## Developer
+- Justin Carter
+- University of Utah || Computer Science Major
+- 1619054@umail.utah.edu
