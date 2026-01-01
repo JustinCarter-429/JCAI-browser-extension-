@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "JcAi - Serverless AI",
+  "version": "3.0.0",
+  "description": "Lightweight AI assistant powered by Hugging Face Inference API via secure Supabase proxy",
+  "permissions": [
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://dfzwlqpyjzeibuvilmcd.supabase.co/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "JcAi - AI Assistant"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; connect-src 'self' https://dfzwlqpyjzeibuvilmcd.supabase.co;"
+  }
+}

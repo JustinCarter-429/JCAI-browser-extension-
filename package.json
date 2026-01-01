@@ -1,0 +1,18 @@
+{
+  "name": "jcai-serverless-api",
+  "version": "3.0.0",
+  "description": "Lightweight AI assistant using Hugging Face Serverless Inference API",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "mammoth": "^1.6.0",
+    "openai": "^6.15.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

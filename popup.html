@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JcAi - Serverless Chat</title>
+  <style>
+    :root {
+      --bg-gradient: radial-gradient(circle at top, #1c1d33, #0d0e1c);
+      --card: rgba(18, 20, 36, 0.85);
+      --border: rgba(255, 255, 255, 0.08);
+      --user: #6fe0ff;
+      --ai: #ffe66f;
+      --text: #f7f8ff;
+      --muted: rgba(247, 248, 255, 0.6);
+      --accent: #7d5bff;
+      --accent-strong: #a76bff;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-width: 380px;
+      min-height: 560px;
+      font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+    .app {
+      width: 100%;
+      height: 100%;
+      background: var(--card);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    }
+    .header {
+      padding: 18px 20px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    .clear-btn {
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      letter-spacing: 0.05em;
+    }
+    .message {
+          padding: 12px 14px;
+          border-radius: 16px;
+          line-height: 1.4;
+          font-size: 0.95rem;
+          border: 1px solid var(--border);
+          background: rgba(255,255,255,0.02);
+          display: flex;
+          gap: 8px;
+          align-items: flex-start;
+        }
+        .message .text {
+          flex: 1;
+          white-space: pre-wrap;
+          word-break: break-word;
+        }
+        .message .copy-btn {
+          border: 1px solid var(--border);
+          background: rgba(255,255,255,0.04);
+          color: var(--text);
+          padding: 4px 6px;
+          border-radius: 8px;
+          font-size: 0.75rem;
+          cursor: pointer;
+        }
+        .message.thinking {
+          opacity: 0.7;
+          font-style: italic;
+        }
+    .clear-btn {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .clear-btn:hover {
+      background: rgba(255,255,255,0.06);
+    }
+    .chat-shell {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 20px;
+      gap: 12px;
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .message {
+      padding: 12px 14px;
+      border-radius: 16px;
+      line-height: 1.4;
+      font-size: 0.95rem;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .message .text {
+      flex: 1;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .message .copy-btn {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      padding: 4px 6px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .message.thinking {
+      opacity: 0.7;
+      font-style: italic;
+    }
+    .message.user {
+      align-self: flex-end;
+      border-color: rgba(111, 224, 255, 0.4);
+      color: var(--user);
+      background: rgba(111, 224, 255, 0.08);
+    }
+    .message.ai {
+      align-self: flex-start;
+      border-color: rgba(255, 230, 111, 0.4);
+      color: var(--text);
+      background: rgba(255, 230, 111, 0.05);
+    }
+    .message.system {
+      align-self: center;
+      border-style: dashed;
+      color: var(--muted);
+    }
+    .composer {
+      border-top: 1px solid var(--border);
+      padding: 16px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .input-wrap {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 10px 12px;
+    }
+    textarea {
+      flex: 1;
+      resize: none;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      max-height: 120px;
+    }
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+      color: #0a0518;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 15px rgba(125, 91, 255, 0.35);
+    }
+    .send-btn:hover {
+      transform: translateY(-2px);
+    }
+    .send-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div>
+        <h1>JcAi</h1>
+      </div>
+      <button id="clearChatBtn" class="clear-btn">Clear chat</button>
+    </header>
+
+    <section class="chat-shell">
+      <div id="chatMessages" class="chat-messages">
+      </div>
+    </section>
+
+    <footer class="composer">
+      <div class="input-wrap">
+        <textarea id="promptInput" placeholder="Share an idea, question, or task..." rows="1"></textarea>
+        <button id="sendBtn" class="send-btn" title="Send">
+          <span>Send</span>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "JcAi - Hybrid Local AI",
+  "version": "2.0.0",
+  "description": "Hybrid AI assistant with Code, Writing, and Analysis modes. Runs entirely offline using WebAssembly.",
+  "permissions": [
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "JcAi - Coder, Writer, Analyst"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; worker-src 'self';"
+  }
+}
